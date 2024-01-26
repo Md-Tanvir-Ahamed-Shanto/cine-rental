@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import { MovieContext } from "../context";
 import MovieDetails from "./MovieDetails";
 import Rating from "./Rating";
@@ -8,7 +9,7 @@ import Rating from "./Rating";
 const MovieCard = ({ movie }) => {
   const [isShow, setIsShow] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const { cartData, setCartData } = useContext(MovieContext);
+  const { state, dispatch } = useContext(MovieContext);
   const handleClose = () => {
     setSelectedMovie(null);
     setIsShow(false);
@@ -19,14 +20,22 @@ const MovieCard = ({ movie }) => {
   };
 
   const handleAddMovie = (movie) => {
-    const found = cartData.find((item) => {
+    const found = state.cartData.find((item) => {
       return item.id === movie.id;
     });
 
     if (!found) {
-      setCartData([...cartData, movie]);
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: {
+          ...movie,
+        },
+      });
+      toast.success(`${movie.title} Added Succesfully`, {
+        position: "bottom-right",
+      });
     } else {
-      alert(`the ${movie.title} was allready added`);
+      toast.error(`the ${movie.title} was allready added`);
     }
   };
   return (

@@ -1,13 +1,17 @@
 /* eslint-disable no-unused-vars */
 import { useContext } from "react";
+import { toast } from "react-toastify";
 import { MovieContext } from "../context";
-
 /* eslint-disable react/prop-types */
 const MovieCart = ({ onClose }) => {
-  const { cartData, setCartData } = useContext(MovieContext);
-  const handleRemove = (movieId) => {
-    const newCart = cartData.filter((item) => item.id !== movieId);
-    setCartData([...newCart]);
+  const { state, dispatch } = useContext(MovieContext);
+  const handleRemove = (movie) => {
+    // const newCart = state.cartData.filter((item) => item.id !== movieId);
+    dispatch({
+      type: "REMOVE_TO_CART",
+      payload: movie.id,
+    });
+    toast.warning(`${movie.title} delete from cart`, {});
   };
   return (
     <div className="fixed top-0 left-0 w-screen h-screen z-50 bg-black/60 backdrop-blur-sm">
@@ -16,12 +20,12 @@ const MovieCart = ({ onClose }) => {
           <h2 className="text-2xl lg:text-[30px] mb-10 font-bold">
             Your Carts
           </h2>
-          {cartData.length <= 0 ? (
+          {state.cartData.length <= 0 ? (
             <span className="text-red-600 text-xl font-bold">
               No Cart Item Found
             </span>
           ) : (
-            cartData.map((movie) => (
+            state.cartData.map((movie) => (
               <div
                 className="space-y-8 lg:space-y-12 max-h-[450px] overflow-auto mb-10 lg:mb-14"
                 key={movie.id}
@@ -53,7 +57,8 @@ const MovieCart = ({ onClose }) => {
                       <span
                         className="max-md:hidden"
                         onClick={() => {
-                          handleRemove(movie.id);
+                          // eslint-disable-next-line no-undef
+                          handleRemove(movie);
                         }}
                       >
                         Remove
