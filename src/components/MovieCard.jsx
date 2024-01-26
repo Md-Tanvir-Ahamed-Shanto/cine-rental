@@ -32,8 +32,8 @@ const MovieCard = ({ movie }) => {
   return (
     <>
       {isShow && <MovieDetails movie={selectedMovie} onClose={handleClose} />}
-      {/* dark:border-white/10 */}
-      <figure className="p-4 border border-black/10 shadow-sm  rounded-xl">
+
+      <figure className="p-4 border border-black/10 shadow-sm  rounded-xl dark:border-white/10">
         <img
           className=" object-cover size-[440px]"
           onClick={() => {
